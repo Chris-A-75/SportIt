@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "797209167046",
+    "project_id": "sportit-8e97c",
+    "storage_bucket": "sportit-8e97c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:797209167046:android:256e1060a160017f6083c7",
+        "android_client_info": {
+          "package_name": "com.guyNchris.SportIt"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD0tPcz1DKGoMfc5BT-APc_9r3IveLKrt0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
