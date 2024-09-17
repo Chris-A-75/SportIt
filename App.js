@@ -48,20 +48,24 @@ function MyTabs() {
 }
 
 const App = () => {
-  const [user, setUser] = useState(null); // This will hold the current authenticated user
+  const [Logged, setLogged] = useState(null); // This will hold the current authenticated user
+  
+  onAuthStateChanged(FIREBASE_AUTH, (user) => {
+  if (user) {
+    // User is signed in, see docs for a list of available properties
+    // https://firebase.google.com/docs/reference/js/auth.user (HERE WE PUT THE EMAIL VERIFICATION THING USE LINK)
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(FIREBASE_AUTH, (user) => {
-      setUser(user); // Sets the user state when authentication state changes
-    });
-
-    return unsubscribe; // Clean up subscription
-  }, []);
-
+    setLogged(true);
+    const uid = user.uid;
+  } else {
+    // User is signed out
+    setLogged(false);
+  }
+});
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        {user ? (
+        {Logged ? (
           // If user is logged in, show the TabNavigator (Home, Reservations, Profile)
           <Stack.Screen
             name="Home"

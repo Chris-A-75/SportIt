@@ -61,7 +61,7 @@ const LoginScreen = ({ navigation }) => { // navigation is passed here
           <ActivityIndicator size="large" color="#0000ff" />
         ) : (
           <>
-            <Button title="Login" onPress={signIn} />
+            <Button title="Login" onPress={signIn} /><Text></Text>
             <Button title="Create account" onPress={signUp} />
           </>
         )}
