@@ -5,9 +5,8 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
-import { onAuthStateChanged } from "firebase/auth"; // Import Firebase Auth
-import { initializeApp } from "firebase/app";
-import { FIREBASE_AUTH, firebaseConfig } from "./firebaseConfig";
+import { onAuthStateChanged } from "firebase/auth"; 
+import { FIREBASE_AUTH } from "./firebaseConfig"; 
 
 import HomeScreen from "./screens/HomeScreen";
 import ProfileScreen from "./screens/ProfileScreen";

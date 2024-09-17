@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, Alert, ActivityIndicator, KeyboardAvoidingView } from 'react-native';
-import { auth, FIREBASE_AUTH } from '../firebaseConfig'; // Import the configured Firebase auth
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword} from 'firebase/auth'; // Import signInWithEmailAndPassword
+import { FIREBASE_AUTH } from '../firebaseConfig'; // Import the configured Firebase auth
+import { GoogleAuthProvider, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendEmailVerification, signInWithRedirect} from 'firebase/auth'; // Import signInWithEmailAndPassword
+
+const provider = new GoogleAuthProvider();
 
 const LoginScreen = ({ navigation }) => { // navigation is passed here
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const auth = FIREBASE_AUTH;
-  
+  //signInWithRedirect(auth, provider);
   const signIn = async () => {
     setLoading(true);
     try {
@@ -16,7 +18,7 @@ const LoginScreen = ({ navigation }) => { // navigation is passed here
       console.log(response);
       navigation.replace('Home'); // Will work now since navigation is passed correctly
     } catch (error) {
-      alert(error.message);
+      alert(error.message);  
     } finally {
       setLoading(false);
     }
@@ -26,9 +28,12 @@ const LoginScreen = ({ navigation }) => { // navigation is passed here
     setLoading(true);
     try {
       const response = await createUserWithEmailAndPassword(auth, email, password);
-      console.log(response);
+      sendEmailVerification(auth.currentUser)
+      .then(() => {
+        alert('Verification Email Sent', 'Please check your email to verify your account.');
+      });
     } catch (error) {
-      alert(error.message);
+      alert('Sign Up Error '+ error.message);
     } finally {
       setLoading(false);
     }
