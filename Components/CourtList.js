@@ -14,18 +14,17 @@ const courts = [
   // Add more court objects here
 ];
 
-const CourtList = () => {
-  // Handle press event
-  const handlePress = (courtName) => {
-    Alert.alert('Court Selected', `You selected ${courtName}`);
-  };
-
+const CourtList = ({ navigation }) => {
   // Render an image and text for each court
   const renderCourt = ({ item }) => (
-    <TouchableOpacity style={styles.card} onPress={() => handlePress(item.name)}>
-      <Image source={{ uri: item.image }} style={styles.image} />
+    <TouchableOpacity
+      key={item.id}
+      style={styles.card} // Use the card style for the court
+      onPress={() => navigation.navigate('Booking', { court: item })} // Navigate to BookingScreen
+    >
+      <Image source={{ uri: item.image }} style={styles.image} /> 
       <Text style={styles.text}>{item.name}</Text>
-      <Text style={styles.subText}>{item.Location}</Text>
+      <Text style={styles.subText}>{item.Location}</Text> 
     </TouchableOpacity>
   );
 
@@ -41,6 +40,7 @@ const CourtList = () => {
     </View>
   );
 };
+
 
 const styles = StyleSheet.create({
   container: {

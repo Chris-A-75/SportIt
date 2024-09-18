@@ -12,6 +12,7 @@ import HomeScreen from "./screens/HomeScreen";
 import ProfileScreen from "./screens/ProfileScreen";
 import ReservationsScreen from "./screens/ReservationsScreen";
 import LoginScreen from "./screens/LoginScreen";
+import BookingScreen from "./screens/BookingScreen";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator(); 
@@ -40,44 +41,56 @@ function MyTabs() {
         tabBarLabelStyle: styles.tabBar.labelStyle,
       })}
     >
-      <Tab.Screen name="Home" component={HomeScreen} />
+      <Tab.Screen name="Home" component={HomeStack} options={{ headerShown: false }} />
       <Tab.Screen name="Reservations" component={ReservationsScreen} />
       <Tab.Screen name="Profile" component={ProfileScreen} />
     </Tab.Navigator>
   );
 }
 
-const App = () => {
-  const [Logged, setLogged] = useState(null); // This will hold the current authenticated user
-  
-  onAuthStateChanged(FIREBASE_AUTH, (user) => {
-  if (user) {
-    // User is signed in, see docs for a list of available properties
-    // https://firebase.google.com/docs/reference/js/auth.user (HERE WE PUT THE EMAIL VERIFICATION THING USE LINK)
 
-    setLogged(true);
-    const uid = user.uid;
-  } else {
-    // User is signed out
-    setLogged(false);
-  }
-});
+function HomeStack() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen 
+        name="Home" 
+        component={HomeScreen} 
+        options={{ title: 'Home' }} // Show header for HomeScreen
+      />
+      <Stack.Screen 
+        name="Booking" 
+        component={BookingScreen} 
+        options={{ title: 'Book a Court' }} // Show header for BookingScreen
+      />
+    </Stack.Navigator>
+  );
+}
+
+
+const App = () => {
+  const [Logged, setLogged] = useState(null);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(FIREBASE_AUTH, (user) => {
+      setLogged(!!user);
+    });
+    return unsubscribe;
+  }, []);
+
   return (
     <NavigationContainer>
       <Stack.Navigator>
         {Logged ? (
-          // If user is logged in, show the TabNavigator (Home, Reservations, Profile)
           <Stack.Screen
-            name="Home"
+            name="Tabs"
             component={MyTabs}
-            options={{ headerShown: false }}
+            options={{ headerShown: false }} // Hide header for the tab navigator
           />
         ) : (
-          // If no user is logged in, show the LoginScreen
           <Stack.Screen
             name="Login"
             component={LoginScreen}
-            options={{ headerShown: false }}
+            options={{ headerShown: false }} // Hide header for login screen
           />
         )}
       </Stack.Navigator>

@@ -1,12 +1,13 @@
-import * as React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+// HomeScreen.js
+import React from 'react';
+import { View, TouchableOpacity, StyleSheet, Text } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons'; // Import the icon library
 import CourtList from '../Components/CourtList';
 
-export default function HomeScreen() {
+export default function HomeScreen({ navigation }) {
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <CourtList />
+      <CourtList navigation={navigation} /> 
       <TouchableOpacity style={styles.floatingButton} onPress={() => alert('Book a court')}>
         <Icon name="calendar-today" size={18} color="white" style={styles.buttonIcon} />
         <Text style={styles.buttonText}>Book a court</Text>
@@ -20,26 +21,26 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 15,
     right: 5,
-    backgroundColor: '#007BFF', // Button color
-    paddingVertical: 20, // Reduced height
-    paddingHorizontal: 25, // Reduced width
-    borderRadius: 10, // Rounded corners
+    backgroundColor: '#007BFF',
+    paddingVertical: 20,
+    paddingHorizontal: 25,
+    borderRadius: 10,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.3,
     shadowRadius: 3,
-    elevation: 5, // For Android shadow effect
-    alignItems: 'center', // Center contents horizontally
-    flexDirection: 'row', // Align icon and text in a row
-    justifyContent: 'center', // Center contents vertically
+    elevation: 5,
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'center',
   },
   buttonText: {
     color: 'white',
     fontWeight: 'bold',
-    fontSize: 14, // Adjusted font size
-    marginLeft: 8, // Space between icon and text
+    fontSize: 14,
+    marginLeft: 8,
   },
   buttonIcon: {
-    marginRight: 8, // Space between icon and text
+    marginRight: 8,
   },
 });
