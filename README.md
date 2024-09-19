@@ -16,7 +16,5 @@ to run the app, use the command ```npx expo start``` to start the web server on 
 2- Court data will be stored as json: 
 
 ```
-{id: ____, name: ____, mainDisplayLocation: ____, detailedLocation:____, courtPictureLink:____, hasParkingSpace:____, openFrom:____, openTo:____, phoneNumber:____, pricePerPersonDollar:____, pricePerPersonLBP:____, courtType:____, indoorsOrOutdoors:____, pricePerOnePersonHalfHour:____,}
+{id: ____, name: ____, mainDisplayLocation: ____, courtPictureLink:____, hasParkingSpace:____, openFrom:____, openTo:____, phoneNumber:____, pricePerPersonDollar:____, courtTypes:[____], indoorsOrOutdoors:____, pricePerOnePersonOneAndHalfHour:____,}
 ```
-
-guy

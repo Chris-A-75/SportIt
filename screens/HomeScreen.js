@@ -8,7 +8,10 @@ export default function HomeScreen({ navigation }) {
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
       <CourtList navigation={navigation} /> 
-      <TouchableOpacity style={styles.floatingButton} onPress={() => alert('Book a court')}>
+      <TouchableOpacity 
+        style={styles.floatingButton} 
+        onPress={() => alert('Book a court')}
+      >
         <Icon name="calendar-today" size={18} color="white" style={styles.buttonIcon} />
         <Text style={styles.buttonText}>Book a court</Text>
       </TouchableOpacity>
@@ -21,7 +24,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 15,
     right: 5,
-    backgroundColor: '#007BFF',
+    backgroundColor: 'rgba(0, 123, 255, 0.8)', // Updated to be slightly transparent
     paddingVertical: 20,
     paddingHorizontal: 25,
     borderRadius: 10,

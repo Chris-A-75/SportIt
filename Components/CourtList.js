@@ -1,30 +1,33 @@
 import React from 'react';
-import { View, FlatList, Text, StyleSheet, Image, Dimensions, TouchableOpacity, Alert } from 'react-native';
+import { View, FlatList, Text, StyleSheet, Image, Dimensions, TouchableOpacity } from 'react-native';
 
 const { width } = Dimensions.get('window');
 
+// Updated courts array with PricePerPersonDollar
 const courts = [
-  { id: '1', name: 'Court 1', Location: 'Achrafieh, Lebanon', image: 'https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png' },
-  { id: '2', name: 'Court 2', Location: 'Achrafieh, Lebanon', image: 'https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png' },
-  { id: '3', name: 'Court 3', Location: 'Achrafieh, Lebanon', image: 'https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png' },
-  { id: '4', name: 'Court 4', Location: 'Achrafieh, Lebanon', image: 'https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png' },
-  { id: '5', name: 'Court 5', Location: 'Achrafieh, Lebanon', image: 'https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png' },
-  { id: '6', name: 'Court 6', Location: 'Achrafieh, Lebanon', image: 'https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png' },
-  { id: '7', name: 'Court 7', Location: 'Achrafieh, Lebanon', image: 'https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png' },
-  // Add more court objects here
+  { id: '1', name: 'Court 1', Location: 'Achrafieh, Lebanon', image: 'https://lh3.googleusercontent.com/p/AF1QipPrry0EuTdOJvyiLmacwXfFK5y6yhjGbemXMLRg=s680-w680-h510', PricePerPersonDollar: 15 },
+  { id: '2', name: 'Court 2', Location: 'Achrafieh, Lebanon', image: 'https://lh3.googleusercontent.com/p/AF1QipPrry0EuTdOJvyiLmacwXfFK5y6yhjGbemXMLRg=s680-w680-h510', PricePerPersonDollar: 20 },
+  { id: '3', name: 'Court 3', Location: 'Achrafieh, Lebanon', image: 'https://lh3.googleusercontent.com/p/AF1QipPrry0EuTdOJvyiLmacwXfFK5y6yhjGbemXMLRg=s680-w680-h510', PricePerPersonDollar: 18 },
+  { id: '4', name: 'Court 4', Location: 'Achrafieh, Lebanon', image: 'https://lh3.googleusercontent.com/p/AF1QipPrry0EuTdOJvyiLmacwXfFK5y6yhjGbemXMLRg=s680-w680-h510', PricePerPersonDollar: 25 },
+  { id: '5', name: 'Court 5', Location: 'Achrafieh, Lebanon', image: 'https://lh3.googleusercontent.com/p/AF1QipPrry0EuTdOJvyiLmacwXfFK5y6yhjGbemXMLRg=s680-w680-h510', PricePerPersonDollar: 22 },
+  { id: '6', name: 'Court 6', Location: 'Achrafieh, Lebanon', image: 'https://lh3.googleusercontent.com/p/AF1QipPrry0EuTdOJvyiLmacwXfFK5y6yhjGbemXMLRg=s680-w680-h510', PricePerPersonDollar: 17 },
+  { id: '7', name: 'Court 7', Location: 'Achrafieh, Lebanon', image: 'https://lh3.googleusercontent.com/p/AF1QipPrry0EuTdOJvyiLmacwXfFK5y6yhjGbemXMLRg=s680-w680-h510', PricePerPersonDollar: 19 },
 ];
 
 const CourtList = ({ navigation }) => {
-  // Render an image and text for each court
   const renderCourt = ({ item }) => (
     <TouchableOpacity
-      key={item.id}
-      style={styles.card} // Use the card style for the court
-      onPress={() => navigation.navigate('Booking', { court: item })} // Navigate to BookingScreen
+      style={styles.card}
+      onPress={() => navigation.navigate('Booking', { court: item })}
     >
-      <Image source={{ uri: item.image }} style={styles.image} /> 
-      <Text style={styles.text}>{item.name}</Text>
-      <Text style={styles.subText}>{item.Location}</Text> 
+      <Image source={{ uri: item.image }} style={styles.image} />
+      <View style={styles.textContainer}>
+        <View style={styles.infoContainer}>
+          <Text style={styles.text}>{item.name}</Text>
+          <Text style={styles.subText}>{item.Location}</Text>
+        </View>
+        <Text style={styles.price}>${item.PricePerPersonDollar}</Text>
+      </View>
     </TouchableOpacity>
   );
 
@@ -34,37 +37,49 @@ const CourtList = ({ navigation }) => {
         data={courts}
         renderItem={renderCourt}
         keyExtractor={item => item.id}
-        contentContainerStyle={styles.flatListContainer} // Add padding to the FlatList
+        contentContainerStyle={styles.flatListContainer}
         showsVerticalScrollIndicator={false}
       />
     </View>
   );
 };
 
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 10, // Add padding to the edges of the screen
+    paddingHorizontal: 10,
   },
   card: {
     backgroundColor: '#ffffff',
     padding: 20,
-    paddingHorizontal: 50,
     margin: 10,
-    borderRadius: 10, // Rounded corners
-    alignItems: 'center', // Center contents horizontally
-    elevation: 3, // Add elevation for Android shadow
-    shadowColor: '#000', // Shadow color
-    shadowOffset: { width: 0, height: 2 }, // Shadow offset
-    shadowOpacity: 0.3, // Shadow opacity
-    shadowRadius: 1, // Shadow radius
+    borderRadius: 10,
+    alignItems: 'flex-start',
+    elevation: 3,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 1,
   },
   image: {
-    width: width * 0.75, // Take up 75% of the screen width
-    height: width * 0.5, // Height is 50% of the screen width to maintain landscape format
-    borderRadius: 10, // Rounded edges for the image
-    marginBottom: 10, // Space between image and text
+    width: width * 0.75,
+    height: width * 0.5,
+    borderRadius: 10,
+    marginBottom: 10,
+  },
+  textContainer: {
+    flexDirection: 'row', // Align items horizontally
+    justifyContent: 'space-between', // Space between items
+    width: '100%', // Full width for the container
+  },
+  infoContainer: {
+    flex: 1, // Allow this to take remaining space
+  },
+  price: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#4CAF50', // Use a green color for the price
+    alignSelf: 'flex-end', // Align price to the right
   },
   text: {
     fontSize: 20,
@@ -75,7 +90,7 @@ const styles = StyleSheet.create({
     color: '#353635',
   },
   flatListContainer: {
-    paddingBottom: 20, // Add padding at the bottom of the FlatList
+    paddingBottom: 20,
   },
 });
 
