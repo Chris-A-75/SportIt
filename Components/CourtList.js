@@ -5,14 +5,33 @@ const { width } = Dimensions.get('window');
 
 // Updated courts array with PricePerPersonDollar
 const courts = [
-  { id: '1', name: 'Court 1', Location: 'Achrafieh, Lebanon', image: 'https://lh3.googleusercontent.com/p/AF1QipPrry0EuTdOJvyiLmacwXfFK5y6yhjGbemXMLRg=s680-w680-h510', PricePerPersonDollar: 15 },
-  { id: '2', name: 'Court 2', Location: 'Achrafieh, Lebanon', image: 'https://lh3.googleusercontent.com/p/AF1QipPrry0EuTdOJvyiLmacwXfFK5y6yhjGbemXMLRg=s680-w680-h510', PricePerPersonDollar: 20 },
-  { id: '3', name: 'Court 3', Location: 'Achrafieh, Lebanon', image: 'https://lh3.googleusercontent.com/p/AF1QipPrry0EuTdOJvyiLmacwXfFK5y6yhjGbemXMLRg=s680-w680-h510', PricePerPersonDollar: 18 },
-  { id: '4', name: 'Court 4', Location: 'Achrafieh, Lebanon', image: 'https://lh3.googleusercontent.com/p/AF1QipPrry0EuTdOJvyiLmacwXfFK5y6yhjGbemXMLRg=s680-w680-h510', PricePerPersonDollar: 25 },
-  { id: '5', name: 'Court 5', Location: 'Achrafieh, Lebanon', image: 'https://lh3.googleusercontent.com/p/AF1QipPrry0EuTdOJvyiLmacwXfFK5y6yhjGbemXMLRg=s680-w680-h510', PricePerPersonDollar: 22 },
-  { id: '6', name: 'Court 6', Location: 'Achrafieh, Lebanon', image: 'https://lh3.googleusercontent.com/p/AF1QipPrry0EuTdOJvyiLmacwXfFK5y6yhjGbemXMLRg=s680-w680-h510', PricePerPersonDollar: 17 },
-  { id: '7', name: 'Court 7', Location: 'Achrafieh, Lebanon', image: 'https://lh3.googleusercontent.com/p/AF1QipPrry0EuTdOJvyiLmacwXfFK5y6yhjGbemXMLRg=s680-w680-h510', PricePerPersonDollar: 19 },
+  {
+    id: '1',
+    name: 'Court 1',
+    Location: 'Achrafieh, Lebanon',
+    image: 'https://lh3.googleusercontent.com/p/AF1QipPrry0EuTdOJvyiLmacwXfFK5y6yhjGbemXMLRg=s680-w680-h510',
+    PricePerPersonDollar: 15,
+    courtTypes: ['Padel Court 1', 'Basketball Court 1'],
+  },
+  {
+    id: '2',
+    name: 'Court 2',
+    Location: 'Achrafieh, Lebanon',
+    image: 'https://lh3.googleusercontent.com/p/AF1QipPrry0EuTdOJvyiLmacwXfFK5y6yhjGbemXMLRg=s680-w680-h510',
+    PricePerPersonDollar: 20,
+    courtTypes: ['Tennis Court 1', 'Football Field 1'],
+  },
+  {
+    id: '3',
+    name: 'Court 3',
+    Location: 'Achrafieh, Lebanon',
+    image: 'https://lh3.googleusercontent.com/p/AF1QipPrry0EuTdOJvyiLmacwXfFK5y6yhjGbemXMLRg=s680-w680-h510',
+    PricePerPersonDollar: 18,
+    courtTypes: ['Basketball Court 2', 'Padel Court 2'],
+  },
+  // Add more courts as needed
 ];
+
 
 const CourtList = ({ navigation }) => {
   const renderCourt = ({ item }) => (
