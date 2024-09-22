@@ -1,51 +1,58 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, FlatList, Text, StyleSheet, Image, Dimensions, TouchableOpacity } from 'react-native';
+import { FIREBASE_FIRESTORE } from '../firebaseConfig'; // Adjusted path as needed
+import { collection, getDocs } from 'firebase/firestore';
 
 const { width } = Dimensions.get('window');
 
-// Updated courts array with PricePerPersonDollar
-const courts = [
-  {
-    id: '1',
-    name: 'Court 1',
-    Location: 'Achrafieh, Lebanon',
-    image: 'https://lh3.googleusercontent.com/p/AF1QipPrry0EuTdOJvyiLmacwXfFK5y6yhjGbemXMLRg=s680-w680-h510',
-    PricePerPersonDollar: 15,
-    courtTypes: ['Padel Court 1', 'Basketball Court 1'],
-  },
-  {
-    id: '2',
-    name: 'Court 2',
-    Location: 'Achrafieh, Lebanon',
-    image: 'https://lh3.googleusercontent.com/p/AF1QipPrry0EuTdOJvyiLmacwXfFK5y6yhjGbemXMLRg=s680-w680-h510',
-    PricePerPersonDollar: 20,
-    courtTypes: ['Tennis Court 1', 'Football Field 1'],
-  },
-  {
-    id: '3',
-    name: 'Court 3',
-    Location: 'Achrafieh, Lebanon',
-    image: 'https://lh3.googleusercontent.com/p/AF1QipPrry0EuTdOJvyiLmacwXfFK5y6yhjGbemXMLRg=s680-w680-h510',
-    PricePerPersonDollar: 18,
-    courtTypes: ['Basketball Court 2', 'Padel Court 2'],
-  },
-  // Add more courts as needed
-];
-
-
 const CourtList = ({ navigation }) => {
+  const [courts, setCourts] = useState([]);
+
+  useEffect(() => {
+    const fetchCourts = async () => {
+      try {
+        const courtsCollection = collection(FIREBASE_FIRESTORE, 'courts'); // Reference to the 'courts' collection
+        const courtsSnapshot = await getDocs(courtsCollection); // Fetch all documents in the collection
+
+        const courtsData = courtsSnapshot.docs.map(doc => ({
+          id: doc.id, // Document ID
+          Bookings: doc.data().Bookings,
+          courtPictureLink: doc.data().courtPictureLink,
+          courtTypes: doc.data().courtTypes,
+          geolocation: doc.data().geolocation,
+          hasParkingSpace: doc.data().hasParkingSpace,
+          indoorsOrOutdoors: doc.data().indoorsOrOutdoors,
+          mainDisplayLocation: doc.data().mainDisplayLocation,
+          name: doc.data().name,
+          openFrom: doc.data().openFrom,
+          openTo: doc.data().openTo,
+          phoneNumber: doc.data().phoneNumber,
+          pricePerOnePersonHalfHour: doc.data().pricePerOnePersonHalfHour,
+          pricePerPersonDollar: doc.data().pricePerPersonDollar,
+        }));
+
+        console.log("Fetched courts data:", courtsData); // Log the fetched data
+        setCourts(courtsData); // Update state with the fetched courts
+      } catch (error) {
+        console.error("Error fetching court data: ", error);
+      }
+    };
+
+    fetchCourts();
+  }, []);
+
   const renderCourt = ({ item }) => (
     <TouchableOpacity
       style={styles.card}
       onPress={() => navigation.navigate('Booking', { court: item })}
     >
-      <Image source={{ uri: item.image }} style={styles.image} />
+      <Image source={{ uri: item.courtPictureLink }} style={styles.image} />
       <View style={styles.textContainer}>
         <View style={styles.infoContainer}>
           <Text style={styles.text}>{item.name}</Text>
-          <Text style={styles.subText}>{item.Location}</Text>
+          <Text style={styles.subText}>{item.mainDisplayLocation}</Text>
         </View>
-        <Text style={styles.price}>${item.PricePerPersonDollar}</Text>
+        <Text style={styles.price}>${item.pricePerPersonDollar}</Text>
       </View>
     </TouchableOpacity>
   );
@@ -73,7 +80,7 @@ const styles = StyleSheet.create({
     padding: 20,
     margin: 10,
     borderRadius: 10,
-    alignItems: 'flex-start',
+    alignItems: 'center', // Center items in the card
     elevation: 3,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
@@ -81,32 +88,34 @@ const styles = StyleSheet.create({
     shadowRadius: 1,
   },
   image: {
-    width: width * 0.75,
-    height: width * 0.5,
+    width: '100%', // Make the image take the full width of the card
+    height: width * 0.5, // Set the height proportionally
     borderRadius: 10,
     marginBottom: 10,
+    resizeMode: 'cover', // Ensure the image covers the area without distortion
   },
   textContainer: {
-    flexDirection: 'row', // Align items horizontally
-    justifyContent: 'space-between', // Space between items
-    width: '100%', // Full width for the container
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
   },
   infoContainer: {
-    flex: 1, // Allow this to take remaining space
+    flex: 1,
   },
   price: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#4CAF50', // Use a green color for the price
-    alignSelf: 'flex-end', // Align price to the right
+    color: '#4CAF50',
+    alignSelf: 'flex-end',
   },
   text: {
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: 'bold',
   },
   subText: {
     fontSize: 17,
     color: '#353635',
+    marginTop: 5,
   },
   flatListContainer: {
     paddingBottom: 20,

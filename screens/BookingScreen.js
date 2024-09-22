@@ -29,13 +29,13 @@ const BookingScreen = ({ route }) =>  {
 
   return (
     <View style={styles.container}>
-      <Image source={{ uri: court.image }} style={styles.image} />
+      <Image source={{ uri: court.courtPictureLink }} style={styles.image} />
       <View style={styles.separator} />
       <View style={styles.headerContainer}>
         <Text style={styles.title}>{court.name}</Text>
-        <Text style={styles.price}>${court.PricePerPersonDollar}/hour</Text>
+        <Text style={styles.price}>${court.pricePerPersonDollar}/hour</Text>
       </View>
-      <Text style={styles.location}>{court.Location}</Text>
+      <Text style={styles.location}>{court.mainDisplayLocation}</Text>
 
       <View style={styles.dropdownContainer}>
         <Text style={styles.dropdownLabel}>Court Type:</Text>
