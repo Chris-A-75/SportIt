@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity, Modal, StatusBar, Alert } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import moment from 'moment';
@@ -25,15 +25,15 @@ const BookingScreen = ({ route }) => {
   const getTimeSlots = () => {
     const slots = [];
     const openTime = moment(court.openFrom, 'HH:mm');
-    const closeTime = moment(court.openTo, 'HH:mm');
-
-    while (openTime.isBefore(closeTime)) {
+    const closeTime = moment(court.openTo, 'HH:mm').subtract(30, 'minutes'); // Subtract half an hour
+  
+    while (openTime.isBefore(closeTime) || openTime.isSame(closeTime)) {
       slots.push(openTime.format('HH:mm'));
       openTime.add(30, 'minutes');
     }
-
+  
     return slots;
-  };
+  };  
 
   const formatCloseTime = (time) => {
     const hours = Math.floor(time);
@@ -46,6 +46,10 @@ const BookingScreen = ({ route }) => {
 
   const handleBook = () => {
     // Sort selected times based on their index in timeSlots
+    if (selectedTimes.length < 1) {
+      Alert.alert("Booking Error", "Please select at least 1 time slot.");
+      return;
+    }
     const sortedIndices = selectedTimes
       .map(time => timeSlots.indexOf(time))
       .sort((a, b) => a - b);
@@ -53,9 +57,9 @@ const BookingScreen = ({ route }) => {
     // Check if sorted indices are consecutive
     const isConsecutive = sortedIndices.every((index, i) => i === 0 || index === sortedIndices[i - 1] + 1);
   
-    if (selectedTimes.length < 2 || selectedTimes.length > 5 || !isConsecutive) {
+    if (selectedTimes.length < 1 || selectedTimes.length > 4 || !isConsecutive) {
       console.log(selectedTimes.length + " " + isConsecutive);
-      Alert.alert("Booking Error", "Please select at least 2 consecutive time slots.");
+      Alert.alert("Booking Error", "Please select consecutive time slots.");
       return;
     }
   
@@ -71,55 +75,93 @@ const BookingScreen = ({ route }) => {
   };
   
 
-const toggleTimeSelection = (time) => {
-  const timeIndex = timeSlots.indexOf(time);
-  const isSelected = selectedTimes.includes(time);
-
-  if (isSelected) {
-    // Deselecting the time
-    const updatedTimes = selectedTimes.filter(t => t !== time);
-    setSelectedTimes(updatedTimes);
-  } else {
-    // If the time is not selected
-    if (selectedTimes.length < 5) {
-      if (selectedTimes.length === 0) {
-        setSelectedTimes([time]);
-      } else {
-        // Get the indices of the selected times
-        const selectedIndices = selectedTimes.map(t => timeSlots.indexOf(t)).sort((a, b) => a - b);
-        const lastSelectedIndex = selectedIndices[selectedIndices.length - 1];
-        const firstSelectedIndex = selectedIndices[0];
-
-        // Check if the new time is adjacent to the current selection
-        if (timeIndex === lastSelectedIndex + 1 || timeIndex === firstSelectedIndex - 1) {
-          setSelectedTimes(prevTimes => [...prevTimes, time]);
-        } else {
-          Alert.alert("Selection Error", "You can only select consecutive time slots.");
-        }
-      }
-    } else {
-      Alert.alert("Selection Error", "You can only book a maximum of 2 hours.");
-    }
-  }
-};
-const calculateTotalTime = (selectedTimes) => {
-  if (selectedTimes.length === 0) return 0;
-
-  const startTime = moment(selectedTimes[0], 'HH:mm');
-  const endTime = moment(selectedTimes[selectedTimes.length - 1], 'HH:mm');
-
-  // Calculate the absolute duration
-  const duration = moment.duration(endTime.diff(startTime)).asHours();
-
-  // Return the absolute value of the duration
-  return Math.abs(duration);
-};
+  const calculateTotalTime = (selectedTimes) => {
+    // Each selected time slot represents 0.5 hours
+    return selectedTimes.length * 0.5; // Return total time in hours
+  };
+  
 const handleDateSelection = (date) => {
   setSelectedDate(date);
   setSelectedTimes([]); // Reset selected times when date changes
 };
-  
 
+const getBookedTimeSlots = () => {
+  const bookedSlots = [];
+  const halfHourDuration = 30; // minutes
+  const selectedDateFormatted = moment(selectedDate, 'DD MMM').startOf('day');
+
+  court.Bookings.forEach(booking => {
+    const bookingCourtType = booking.CourtType; 
+
+    // Convert Firestore timestamp to a JavaScript Date
+    const { seconds, nanoseconds } = booking.Time;
+    const bookingDate = new Date(seconds * 1000 + Math.floor(nanoseconds / 1000000));
+    
+    const bookingTime = moment(bookingDate);
+    const bookingDateFormatted = bookingTime.startOf('day');
+    const bookingTimeUTC = moment(bookingDate).utcOffset(3);
+    console.log('Checking booking:', {
+        bookingCourtType,
+        selectedCourtType,
+        bookingDateFormatted: bookingDateFormatted.format('DD MMM'),
+        selectedDate: selectedDateFormatted.format('DD MMM'),
+        bookingTime: bookingTimeUTC.format('HH:mm'), // Log the booking time
+    });
+
+    if (bookingCourtType === selectedCourtType && bookingDateFormatted.isSame(selectedDateFormatted)) {
+      const duration = booking.DurationInHalfHours * halfHourDuration; // Duration in minutes
+      const bookingEnd = bookingTimeUTC.clone().add(duration, 'minutes'); // End time based on duration
+      let current = bookingTimeUTC.clone(); // Starting point for time slots
+      
+  
+      while (current.isBefore(bookingEnd)) {
+          bookedSlots.push(current.format('HH:mm')); // Format to HH:mm for output
+          console.log('Adding Time Slot:', current.format('HH:mm')); // Log each added time slot
+          current.add(30, 'minutes'); // Increment current time by 30 minutes
+      }
+  }
+  
+});
+
+
+  return bookedSlots;
+};
+
+
+
+
+
+const bookedTimeSlots = useMemo(() => {
+  const slots = getBookedTimeSlots();
+  console.log('Booked time slots:', slots); // Add this line
+  return slots;
+}, [court.Bookings, selectedCourtType, selectedDate]);
+
+
+
+  const toggleTimeSelection = (time) => {
+    const isSelected = selectedTimes.includes(time);
+    const isBooked = bookedTimeSlots.includes(time);
+  
+    if (isBooked) {
+      Alert.alert("Unavailable", "This time slot is already booked.");
+      return;
+    }
+  
+    if (isSelected) {
+      // Deselecting the time
+      const updatedTimes = selectedTimes.filter(t => t !== time);
+      setSelectedTimes(updatedTimes);
+    } else {
+      // Selecting a new time
+      if (selectedTimes.length < 4) { // Maximum of 4 selections
+        setSelectedTimes(prevTimes => [...prevTimes, time]);
+      } else {
+        Alert.alert("Selection Error", "You can only select a maximum of 4 time slots.");
+      }
+    }
+  };
+  
   return (
     <View style={styles.container}>
       <Image source={{ uri: court.courtPictureLink }} style={styles.image} />
@@ -186,16 +228,31 @@ const handleDateSelection = (date) => {
       </View>
 
       <View style={styles.timeGrid}>
-        {timeSlots.map((time, index) => (
-          <TouchableOpacity 
-            key={index} 
-            style={[styles.timeButton, selectedTimes.includes(time) && styles.selectedTimeButton]} 
-            onPress={() => toggleTimeSelection(time)}
-          >
-            <Text style={[styles.timeButtonText, selectedTimes.includes(time) ? styles.selectedText : styles.defaultText]}>{time}</Text>
-          </TouchableOpacity>
-        ))}
-      </View>
+    {timeSlots.map((time, index) => {
+        const isBooked = bookedTimeSlots.includes(time);
+        return (
+            <TouchableOpacity 
+                key={index} 
+                style={[
+                    styles.timeButton, 
+                    selectedTimes.includes(time) && styles.selectedTimeButton, 
+                    isBooked && styles.bookedTimeButton
+                ]}
+                onPress={() => toggleTimeSelection(time)}
+                disabled={isBooked}
+            >
+                <Text style={[
+                    styles.timeButtonText, 
+                    selectedTimes.includes(time) ? styles.selectedText : styles.defaultText,
+                    isBooked && styles.bookedText
+                ]}>
+                    {time}
+                </Text>
+            </TouchableOpacity>
+        );
+    })}
+</View>
+
       <View style={styles.totalTimeContainer}>
   <Text style={styles.totalTimeText}>
     Total Time: {calculateTotalTime(selectedTimes)} hour(s)
@@ -421,6 +478,12 @@ const styles = StyleSheet.create({
   bookButtonText: {
     color: 'white',
     fontSize: 18,
+  },
+  bookedTimeButton: {
+    backgroundColor: 'red', // Color for booked time buttons
+  },
+  bookedText: {
+    color: 'white', // Text color for booked time buttons
   },
 });
 
