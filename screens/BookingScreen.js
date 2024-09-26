@@ -45,25 +45,31 @@ const BookingScreen = ({ route }) => {
   const timeSlots = getTimeSlots();
 
   const handleBook = () => {
-    // Check if selected times are consecutive
-    const indices = selectedTimes.map(time => timeSlots.indexOf(time));
-    const isConsecutive = indices.every((index, i) => i === 0 || index === indices[i - 1] + 1);
-
+    // Sort selected times based on their index in timeSlots
+    const sortedIndices = selectedTimes
+      .map(time => timeSlots.indexOf(time))
+      .sort((a, b) => a - b);
+  
+    // Check if sorted indices are consecutive
+    const isConsecutive = sortedIndices.every((index, i) => i === 0 || index === sortedIndices[i - 1] + 1);
+  
     if (selectedTimes.length < 2 || selectedTimes.length > 5 || !isConsecutive) {
-        Alert.alert("Booking Error", "Please select at least 2 consecutive time slots.");
-        return;
+      console.log(selectedTimes.length + " " + isConsecutive);
+      Alert.alert("Booking Error", "Please select at least 2 consecutive time slots.");
+      return;
     }
-
+  
     const randomAlertMessages = [
-        "Booking successful!",
-        "Your reservation is confirmed!",
-        "Enjoy your game!",
-        "Booking has been made!",
-        "You are all set for your match!"
+      "Booking successful!",
+      "Your reservation is confirmed!",
+      "Enjoy your game!",
+      "Booking has been made!",
+      "You are all set for your match!"
     ];
     const randomMessage = randomAlertMessages[Math.floor(Math.random() * randomAlertMessages.length)];
     Alert.alert("Booking Status", randomMessage);
-};
+  };
+  
 
 const toggleTimeSelection = (time) => {
   const timeIndex = timeSlots.indexOf(time);
