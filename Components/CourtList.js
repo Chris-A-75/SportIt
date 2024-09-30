@@ -29,7 +29,6 @@ const CourtList = ({ navigation }) => {
           openTo: doc.data().openTo,
           phoneNumber: doc.data().phoneNumber,
           pricePerOnePersonHalfHour: doc.data().pricePerOnePersonHalfHour,
-          pricePerPersonDollar: doc.data().pricePerPersonDollar,
           Tags: doc.data().Tags, // Add the tags
         }));
 
@@ -64,7 +63,7 @@ const CourtList = ({ navigation }) => {
         </View>
       </View>
       <Text style={styles.subText}>{item.mainDisplayLocation}</Text>
-      <Text style={styles.price}>${item.pricePerPersonDollar}</Text>
+      <Text style={styles.price}>${item.pricePerOnePersonHalfHour}</Text>
     </TouchableOpacity>
   );
 
