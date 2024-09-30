@@ -2,7 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity, Modal, StatusBar, Alert } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import moment from 'moment';
-
+//TODOOOOOO: FIX PRICEPER PERSONO TO HALF HOUR INSTEAD OF HOUR
 const BookingScreen = ({ route }) => {
   const { court } = route.params;
   const [selectedCourtType, setSelectedCourtType] = useState(court.courtTypes[0]);
@@ -170,7 +170,7 @@ const bookedTimeSlots = useMemo(() => {
         <View style={styles.infoContainer}>
           <View style={styles.headerContainer}>
             <Text style={styles.title}>{court.name}</Text>
-            <Text style={styles.price}>${court.pricePerPersonDollar}/hour</Text>
+            <Text style={styles.price}>${court.pricePerOnePersonHalfHour}/hour</Text>
           </View>
           <Text style={styles.location}>{court.mainDisplayLocation}</Text>
           <View style={styles.separator} /> 
