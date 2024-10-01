@@ -13,6 +13,8 @@ import ProfileScreen from "./screens/ProfileScreen";
 import ReservationsScreen from "./screens/ReservationsScreen";
 import LoginScreen from "./screens/LoginScreen";
 import BookingScreen from "./screens/BookingScreen";
+import CheckoutScreen from "./screens/CheckoutScreen";
+
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator(); 
@@ -55,16 +57,22 @@ function HomeStack() {
       <Stack.Screen 
         name="Home" 
         component={HomeScreen} 
-        options={{ title: 'Home' }} // Show header for HomeScreen
+        options={{ title: 'Home' }} 
       />
       <Stack.Screen 
         name="Booking" 
         component={BookingScreen} 
-        options={{ title: 'Book a Court' }} // Show header for BookingScreen
+        options={{ title: 'Book a Court' }} 
+      />
+      <Stack.Screen 
+        name="Checkout" 
+        component={CheckoutScreen} 
+        options={{ title: 'Checkout' }} // Show header for CheckoutScreen
       />
     </Stack.Navigator>
   );
 }
+
 
 
 const App = () => {
