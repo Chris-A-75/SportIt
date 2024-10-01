@@ -2,8 +2,10 @@ import React, { useState, useMemo } from 'react';
 import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity, Modal, StatusBar, Alert } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import moment from 'moment';
-//TODOOOOOO: FIX PRICEPER PERSONO TO HALF HOUR INSTEAD OF HOUR
+import { useNavigation } from '@react-navigation/native';
+
 const BookingScreen = ({ route }) => {
+  const navigation = useNavigation();
   const { court } = route.params;
   const [selectedCourtType, setSelectedCourtType] = useState(court.courtTypes[0]);
   const [selectedTimes, setSelectedTimes] = useState([]);
@@ -62,16 +64,13 @@ const BookingScreen = ({ route }) => {
       Alert.alert("Booking Error", "Please select consecutive time slots.");
       return;
     }
-  
-    const randomAlertMessages = [
-      "Booking successful!",
-      "Your reservation is confirmed!",
-      "Enjoy your game!",
-      "Booking has been made!",
-      "You are all set for your match!"
-    ];
-    const randomMessage = randomAlertMessages[Math.floor(Math.random() * randomAlertMessages.length)];
-    Alert.alert("Booking Status", randomMessage);
+    setModalVisible(false);
+    navigation.navigate('Checkout', {
+      selectedDate,
+      selectedTimes,
+      court,
+      courtType: selectedCourtType,
+    });
   };
   
 

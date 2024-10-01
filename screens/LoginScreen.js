@@ -21,6 +21,7 @@ const LoginScreen = ({ navigation }) => { // navigation is passed here
       alert(error.message);  
     } finally {
       setLoading(false);
+      //alert(auth.currentUser.name)  TODOOOOOO
     }
   };
 
