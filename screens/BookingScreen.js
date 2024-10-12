@@ -84,47 +84,50 @@ const handleDateSelection = (date) => {
   setSelectedTimes([]); // Reset selected times when date changes
 };
 
-const getBookedTimeSlots = () => {
+const getBookedTimeSlots = () => { //TODO: fix the FUCKING date firmatting SHIT
   const bookedSlots = [];
   const halfHourDuration = 30; // minutes
   const selectedDateFormatted = moment(selectedDate, 'DD MMM').startOf('day');
 
   court.Bookings.forEach(booking => {
-    const bookingCourtType = booking.CourtType; 
+    const bookingCourtType = booking.CourtType;
 
-    // Convert Firestore timestamp to a JavaScript Date
-    const { seconds, nanoseconds } = booking.Time;
-    const bookingDate = new Date(seconds * 1000 + Math.floor(nanoseconds / 1000000));
-    
-    const bookingTime = moment(bookingDate);
-    const bookingDateFormatted = bookingTime.startOf('day');
-    const bookingTimeUTC = moment(bookingDate).utcOffset(3);
-    console.log('Checking booking:', {
+    if (booking.Time && booking.Time.seconds) {
+      const bookingDate = new Date(booking.Time.seconds * 1000); // Convert to JS Date
+      const bookingTime = moment(bookingDate).utcOffset(3); // Adjust for UTC+3
+      const bookingDateFormatted = bookingTime.startOf('day');
+
+      console.log('Checking booking:', {
         bookingCourtType,
         selectedCourtType,
         bookingDateFormatted: bookingDateFormatted.format('DD MMM'),
         selectedDate: selectedDateFormatted.format('DD MMM'),
-        bookingTime: bookingTimeUTC.format('HH:mm'), // Log the booking time
-    });
+        bookingTime: bookingTime.format('YYYY-MM-DD HH:mm:ss'), // Log in a detailed format
+      });
 
-    if (bookingCourtType === selectedCourtType && bookingDateFormatted.isSame(selectedDateFormatted)) {
-      const duration = booking.DurationInHalfHours * halfHourDuration; // Duration in minutes
-      const bookingEnd = bookingTimeUTC.clone().add(duration, 'minutes'); // End time based on duration
-      let current = bookingTimeUTC.clone(); // Starting point for time slots
-      
-  
-      while (current.isBefore(bookingEnd)) {
+      // Log the formatted hour to see the actual booked time
+      console.log('Booking Time (UTC+3):', bookingTime.format('HH:mm'));
+
+      if (bookingCourtType === selectedCourtType && bookingDateFormatted.isSame(selectedDateFormatted)) {
+        const duration = booking.DurationInHalfHours * halfHourDuration; // Duration in minutes
+        const bookingEnd = bookingTime.clone().add(duration, 'minutes'); // End time based on duration
+        let current = bookingTime.clone(); // Starting point for time slots
+
+        while (current.isBefore(bookingEnd)) {
           bookedSlots.push(current.format('HH:mm')); // Format to HH:mm for output
-          console.log('Adding Time Slot:', current.format('HH:mm')); // Log each added time slot
           current.add(30, 'minutes'); // Increment current time by 30 minutes
+        }
       }
-  }
-  
-});
-
+    } else {
+      console.log('Invalid booking time:', booking.Time);
+    }
+  });
 
   return bookedSlots;
 };
+
+
+
 
 
 
