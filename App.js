@@ -19,7 +19,7 @@ import CheckoutScreen from "./screens/CheckoutScreen";
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator(); 
 
-// Bottom tab navigator (for Home, Reservations, Profile)
+// bottom tab navigator (for Home, Reservations, Profile)
 function MyTabs() {
   return (
     <Tab.Navigator
@@ -67,7 +67,7 @@ function HomeStack() {
       <Stack.Screen 
         name="Checkout" 
         component={CheckoutScreen} 
-        options={{ title: 'Checkout' }} // Show header for CheckoutScreen
+        options={{ title: 'Checkout' }} 
       />
     </Stack.Navigator>
   );

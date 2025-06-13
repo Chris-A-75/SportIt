@@ -27,7 +27,7 @@ const BookingScreen = ({ route }) => {
   const getTimeSlots = () => {
     const slots = [];
     const openTime = moment(court.openFrom, 'HH:mm');
-    const closeTime = moment(court.openTo, 'HH:mm').subtract(30, 'minutes'); // Subtract half an hour
+    const closeTime = moment(court.openTo, 'HH:mm').subtract(30, 'minutes'); // subtract half an hour
   
     while (openTime.isBefore(closeTime) || openTime.isSame(closeTime)) {
       slots.push(openTime.format('HH:mm'));
@@ -47,7 +47,7 @@ const BookingScreen = ({ route }) => {
   const timeSlots = getTimeSlots();
 
   const handleBook = () => {
-    // Sort selected times based on their index in timeSlots
+    // sort selected times based on their index in timeSlots
     if (selectedTimes.length < 1) {
       Alert.alert("Booking Error", "Please select at least 1 time slot.");
       return;
@@ -56,7 +56,7 @@ const BookingScreen = ({ route }) => {
       .map(time => timeSlots.indexOf(time))
       .sort((a, b) => a - b);
   
-    // Check if sorted indices are consecutive
+    // check if sorted indices are consecutive
     const isConsecutive = sortedIndices.every((index, i) => i === 0 || index === sortedIndices[i - 1] + 1);
   
     if (selectedTimes.length < 1 || selectedTimes.length > 4 || !isConsecutive) {
@@ -75,16 +75,16 @@ const BookingScreen = ({ route }) => {
   
 
   const calculateTotalTime = (selectedTimes) => {
-    // Each selected time slot represents 0.5 hours
-    return selectedTimes.length * 0.5; // Return total time in hours
+    // rach selected time slot represents 0.5 hours
+    return selectedTimes.length * 0.5; // return total time in hours
   };
   
 const handleDateSelection = (date) => {
   setSelectedDate(date);
-  setSelectedTimes([]); // Reset selected times when date changes
+  setSelectedTimes([]); // reset selected times when date changes
 };
 
-const getBookedTimeSlots = () => { //TODO: fix the FUCKING date firmatting SHIT
+const getBookedTimeSlots = () => { //TODO: fix the date firmatting
   const bookedSlots = [];
   const halfHourDuration = 30; // minutes
   const selectedDateFormatted = moment(selectedDate, 'DD MMM').startOf('day');
@@ -93,8 +93,8 @@ const getBookedTimeSlots = () => { //TODO: fix the FUCKING date firmatting SHIT
     const bookingCourtType = booking.CourtType;
 
     if (booking.Time && booking.Time.seconds) {
-      const bookingDate = new Date(booking.Time.seconds * 1000); // Convert to JS Date
-      const bookingTime = moment(bookingDate).utcOffset(3); // Adjust for UTC+3
+      const bookingDate = new Date(booking.Time.seconds * 1000); // convert to JS Date
+      const bookingTime = moment(bookingDate).utcOffset(3); // adjust for UTC+3
       const bookingDateFormatted = bookingTime.startOf('day');
 
       console.log('Checking booking:', {
@@ -102,20 +102,20 @@ const getBookedTimeSlots = () => { //TODO: fix the FUCKING date firmatting SHIT
         selectedCourtType,
         bookingDateFormatted: bookingDateFormatted.format('DD MMM'),
         selectedDate: selectedDateFormatted.format('DD MMM'),
-        bookingTime: bookingTime.format('YYYY-MM-DD HH:mm:ss'), // Log in a detailed format
+        bookingTime: bookingTime.format('YYYY-MM-DD HH:mm:ss'), // log in a detailed format
       });
 
-      // Log the formatted hour to see the actual booked time
+      // log the formatted hour to see the actual booked time
       console.log('Booking Time (UTC+3):', bookingTime.format('HH:mm'));
 
       if (bookingCourtType === selectedCourtType && bookingDateFormatted.isSame(selectedDateFormatted)) {
-        const duration = booking.DurationInHalfHours * halfHourDuration; // Duration in minutes
-        const bookingEnd = bookingTime.clone().add(duration, 'minutes'); // End time based on duration
-        let current = bookingTime.clone(); // Starting point for time slots
+        const duration = booking.DurationInHalfHours * halfHourDuration; // duration in minutes
+        const bookingEnd = bookingTime.clone().add(duration, 'minutes'); // end time based on duration
+        let current = bookingTime.clone(); // starting point for time slots
 
         while (current.isBefore(bookingEnd)) {
-          bookedSlots.push(current.format('HH:mm')); // Format to HH:mm for output
-          current.add(30, 'minutes'); // Increment current time by 30 minutes
+          bookedSlots.push(current.format('HH:mm')); // format to HH:mm for output
+          current.add(30, 'minutes'); // increment current time by 30 minutes
         }
       }
     } else {
@@ -401,7 +401,7 @@ const styles = StyleSheet.create({
   modalText: {
     fontSize: 20,
     fontWeight: 'bold',
-    paddingTop: 10, // Added padding
+    paddingTop: 10,
   },
   timeGrid: {
     flexDirection: 'row',
@@ -411,7 +411,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   timeButton: {
-    backgroundColor: '#f0f0f0', // Updated to #f0f0f0 for unselected
+    backgroundColor: '#f0f0f0', // #f0f0f0 for unselected
     borderRadius: 5,
     paddingVertical: 5,
     paddingHorizontal: 10,
@@ -431,23 +431,23 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },  
   selectedTimeButton: {
-    backgroundColor: 'rgb(0,123,255)', // Blue color when selected
+    backgroundColor: 'rgb(0,123,255)', // blue color when selected
   },
   timeButtonText: {
     fontSize: 16,
   },
   selectedText: {
-    color: 'white', // Selected text color
+    color: 'white', // selected text color
   },
   defaultText: {
-    color: 'black', // Default text color
+    color: 'black', // default text color
   },
   dateScrollView: {
     flexDirection: 'row',
     marginBottom: 20,
   },
   dateButton: {
-    backgroundColor: '#f0f0f0', // Updated to #f0f0f0 for unselected
+    backgroundColor: '#f0f0f0', // #f0f0f0 for unselected
     borderRadius: 5,
     paddingVertical: 5,
     paddingHorizontal: 15,
@@ -457,7 +457,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   selectedDateButton: {
-    backgroundColor: 'rgb(0,123,255)', // Blue color when selected
+    backgroundColor: 'rgb(0,123,255)', // blue color when selected
   },
   dateButtonText: {
     fontSize: 18,
@@ -468,10 +468,10 @@ const styles = StyleSheet.create({
   },
   closeXText: {
     fontSize: 28,
-    color: 'rgb(0,123,255)', // Changed to blue
+    color: 'rgb(0,123,255)', // changed to blue
   },
   bookButton: {
-    backgroundColor: 'rgba(0, 123, 255, 0.8)', // Updated button color and opacity
+    backgroundColor: 'rgba(0, 123, 255, 0.8)', // updated button color and opacity
     borderRadius: 5,
     padding: 10,
     alignItems: 'center',
@@ -482,10 +482,10 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   bookedTimeButton: {
-    backgroundColor: 'red', // Color for booked time buttons
+    backgroundColor: 'red', // color for booked time buttons
   },
   bookedText: {
-    color: 'white', // Text color for booked time buttons
+    color: 'white', // text color for booked time buttons
   },
 });
 

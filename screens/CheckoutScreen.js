@@ -2,16 +2,16 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, KeyboardAvoidingView, ScrollView, Platform, Alert, ActivityIndicator } from 'react-native';
 import moment from 'moment';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import { doc, updateDoc, arrayUnion, Timestamp } from 'firebase/firestore'; // Import Firestore functions
-import { FIREBASE_FIRESTORE } from '../firebaseConfig'; // Adjust the import path as necessary
+import { doc, updateDoc, arrayUnion, Timestamp } from 'firebase/firestore'; // import Firestore functions
+import { FIREBASE_FIRESTORE } from '../firebaseConfig'; // adjust the import path as necessary
 
-const CheckoutScreen = ({ route, navigation }) => { // Added navigation prop
+const CheckoutScreen = ({ route, navigation }) => { // added navigation prop
   const { selectedDate, selectedTimes, court, courtType } = route.params;
   const [numPeople, setNumPeople] = useState(1);
   const [equipmentNeeded, setEquipmentNeeded] = useState(false);
-  const [additionalNotes, setAdditionalNotes] = useState(''); // State for additional notes
-  const [loading, setLoading] = useState(false); // State for loading indicator
-  const courtId = court.id; // Assuming court.id is the document ID
+  const [additionalNotes, setAdditionalNotes] = useState(''); // state for additional notes
+  const [loading, setLoading] = useState(false); // state for loading indicator
+  const courtId = court.id; // assuming court.id is the document ID
 
   const costPerPerson = court.pricePerOnePersonHalfHour;
   const totalCost = numPeople * (selectedTimes.length * costPerPerson);
@@ -20,18 +20,18 @@ const CheckoutScreen = ({ route, navigation }) => { // Added navigation prop
   const startTime = moment(selectedTimes[0], 'HH:mm');
   const endTime = moment(selectedTimes[selectedTimes.length - 1], 'HH:mm').add(30, 'minutes');
 
-  // Calculate duration based on the number of selected times
-  const totalDurationInHalfHours = selectedTimes.length; // Each selected time represents a half hour
-  const totalDurationInHours = totalDurationInHalfHours * 0.5; // Convert half hours to hours
+  // calculate duration based on the number of selected times
+  const totalDurationInHalfHours = selectedTimes.length; // each selected time represents a half hour
+  const totalDurationInHours = totalDurationInHalfHours * 0.5; // convert half hours to hours
 
-  // Booking data using the correct duration
+  // booking data using the correct duration
   const bookingData = { //TODO: CHANGE THIS LATER
     CourtType: courtType,
     DurationInHalfHours: selectedTimes.length + 1,
     Name: "John Doe",
     NeedsEquipment: equipmentNeeded ? "Yes" : "No",
     NumberOfPeople: numPeople,
-    Time: Timestamp.fromDate(startTime.toDate()), // Store as a Timestamp
+    Time: Timestamp.fromDate(startTime.toDate()), // store as a Timestamp
   };
   
 
@@ -40,16 +40,16 @@ const CheckoutScreen = ({ route, navigation }) => { // Added navigation prop
     try {
       const courtRef = doc(FIREBASE_FIRESTORE, 'courts', courtId.toString());
       await updateDoc(courtRef, {
-        Bookings: arrayUnion(bookingData) // Add booking data to the Bookings array
+        Bookings: arrayUnion(bookingData) // add booking data to the Bookings array
       });
       Alert.alert('Success', 'Booking confirmed successfully!', [
-        { text: 'OK', onPress: () => navigation.navigate('Reservations') } // Navigate to Reservations on OK
+        { text: 'OK', onPress: () => navigation.navigate('Reservations') } // navigate to Reservations on OK
       ]);
     } catch (error) {
       console.error("Error updating document: ", error);
       Alert.alert('Error', 'Failed to confirm booking. Please try again.');
     } finally {
-      setLoading(false); // Stop loading
+      setLoading(false); // stop loading
     }
   };
 
@@ -109,7 +109,7 @@ const CheckoutScreen = ({ route, navigation }) => { // Added navigation prop
             multiline
             numberOfLines={4}
             value={additionalNotes}
-            onChangeText={setAdditionalNotes} // Update state with the input
+            onChangeText={setAdditionalNotes} // update state with the input
           />
 
           <View style={styles.separator} />
@@ -187,7 +187,7 @@ const styles = StyleSheet.create({
   durationText: {
     fontSize: 20,
     fontWeight: '600',
-    color: 'black', // Change this color as needed
+    color: 'black', 
   },
   arrowIcon: {
     marginHorizontal: 5,
