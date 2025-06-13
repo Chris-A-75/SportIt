@@ -1,7 +1,7 @@
 // HomeScreen.js
 import React from 'react';
 import { View, TouchableOpacity, StyleSheet, Text } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons'; // Import the icon library
+import Icon from 'react-native-vector-icons/MaterialIcons'; // import the icon library
 import CourtList from '../Components/CourtList';
 
 export default function HomeScreen({ navigation }) {
@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 15,
     right: 5,
-    backgroundColor: 'rgba(0, 123, 255, 0.8)', // Updated to be slightly transparent
+    backgroundColor: 'rgba(0, 123, 255, 0.8)', // updated to be slightly transparent
     paddingVertical: 20,
     paddingHorizontal: 25,
     borderRadius: 10,

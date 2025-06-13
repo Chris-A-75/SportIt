@@ -7,7 +7,7 @@ const { width } = Dimensions.get('window');
 
 const CourtList = ({ navigation }) => {
   const [courts, setCourts] = useState([]);
-  const [loading, setLoading] = useState(true); // State to track loading status
+  const [loading, setLoading] = useState(true); // state to track loading status
 
   useEffect(() => {
     const fetchCourts = async () => {
@@ -29,7 +29,7 @@ const CourtList = ({ navigation }) => {
           openTo: doc.data().openTo,
           phoneNumber: doc.data().phoneNumber,
           pricePerOnePersonHalfHour: doc.data().pricePerOnePersonHalfHour,
-          Tags: doc.data().Tags, // Add the tags
+          Tags: doc.data().Tags, // add the tags
         }));
 
         console.log("Fetched courts data:", courtsData);
@@ -37,7 +37,7 @@ const CourtList = ({ navigation }) => {
       } catch (error) {
         console.error("Error fetching court data: ", error);
       } finally {
-        setLoading(false); // Stop loading after fetch is complete
+        setLoading(false); // stop loading after fetch is complete
       }
     };
 
@@ -72,7 +72,7 @@ const CourtList = ({ navigation }) => {
       <View style={styles.loaderContainer}>
         <ActivityIndicator size="large" color="#0000ff" />
       </View>
-    ); // Show loading indicator while data is being fetched
+    ); // show loading indicator while data is being fetched
   }
 
   return (
@@ -108,8 +108,8 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.3,
     shadowRadius: 1,
-    width: width * 0.9, // Set a fixed width for the card
-    alignSelf: 'center', // Center the card horizontally
+    width: width * 0.9, // set a fixed width for the card
+    alignSelf: 'center', // center the card horizontally
   },
   image: {
     width: '100%',
@@ -125,22 +125,22 @@ const styles = StyleSheet.create({
   infoContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center', // Align items vertically
+    alignItems: 'center', // align items vertically
   },
   tagsContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    maxWidth: '100%', // Allow the tags to take full width
-    justifyContent: 'flex-start', // Align tags to the left
-    marginTop: 5, // Add some space above tags
+    maxWidth: '100%', // allow the tags to take full width
+    justifyContent: 'flex-start', // align tags to the left
+    marginTop: 5, // add some space above tags
   },
   tag: {
     backgroundColor: '#e0e0e0',
     borderRadius: 5,
-    paddingVertical: 3, // Smaller vertical padding
-    paddingHorizontal: 8, // Smaller horizontal padding
-    margin: 2, // Space between tags
-    fontSize: 12, // Smaller font size
+    paddingVertical: 3, // smaller vertical padding
+    paddingHorizontal: 8, // smaller horizontal padding
+    margin: 2, // space between tags
+    fontSize: 12, // smaller font size
   },
   price: {
     fontSize: 20,
@@ -156,7 +156,7 @@ const styles = StyleSheet.create({
     fontSize: 17,
     color: '#353635',
     marginTop: 5,
-    alignSelf: 'flex-start', // Align to the left
+    alignSelf: 'flex-start', // align to the left
   },
   flatListContainer: {
     paddingBottom: 20,

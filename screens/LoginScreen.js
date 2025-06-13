@@ -16,7 +16,7 @@ const LoginScreen = ({ navigation }) => { // navigation is passed here
     try {
       const response = await signInWithEmailAndPassword(auth, email, password);
       console.log(response);
-      navigation.replace('Home'); // Will work now since navigation is passed correctly
+      navigation.replace('Home'); // will work now since navigation is passed correctly
     } catch (error) {
       alert(error.message);  
     } finally {
