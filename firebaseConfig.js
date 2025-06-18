@@ -3,15 +3,24 @@ import { initializeApp } from 'firebase/app';
 import { getAuth, setPersistence, browserLocalPersistence } from 'firebase/auth'; // Import authentication
 //import { getAnalytics } from 'firebase/analytics'; // Optional, if you need analytics
 import { getFirestore } from "firebase/firestore";
+import {
+  API_KEY,
+  AUTH_DOMAIN,
+  DATABASE_URL,
+  PROJECT_ID,
+  STORAGE_BUCKET,
+  MESSAGING_SENDER_ID,
+  APP_ID
+} from '@env';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyChcP-T-BvlRqGIW8LOhDUTg9xObW5l_Ug",
-  authDomain: "sportit-8e97c.firebaseapp.com",
-  projectId: "sportit-8e97c",
-  storageBucket: "sportit-8e97c.appspot.com",
-  messagingSenderId: "797209167046",
-  appId: "1:797209167046:web:70f0bb193b44c3746083c7",
-  measurementId: "G-QF3BF86NPG"
+  apiKey: API_KEY,
+  authDomain: AUTH_DOMAIN,
+  projectId: PROJECT_ID,
+  storageBucket: STORAGE_BUCKET,
+  messagingSenderId: MESSAGING_SENDER_ID,
+  appId: APP_ID,
+  measurementId: MEASUREMENT_ID,
 };
 
 // Initialize Firebase
