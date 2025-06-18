@@ -6,7 +6,7 @@ to run the app, use the command ```npx expo start``` to start the web server on 
 
 2- Firebase: Used for user authentication (logging in with gmail), storing user & court data in the firestore database, and for google analytics.
 
-3- Trello: Used to make interactive to do list and shit (its cool)
+3- Trello: Used to make interactive to do list (its cool)
 
 4- Node.js: Used to actually be able to run the app
 
