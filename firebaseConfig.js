@@ -1,12 +1,11 @@
 // Firebase stuff
 import { initializeApp } from 'firebase/app';
 import { getAuth, setPersistence, browserLocalPersistence } from 'firebase/auth'; // Import authentication
-//import { getAnalytics } from 'firebase/analytics'; // Optional, if you need analytics
 import { getFirestore } from "firebase/firestore";
 import {
   API_KEY,
   AUTH_DOMAIN,
-  DATABASE_URL,
+  MEASUREMENT_ID,
   PROJECT_ID,
   STORAGE_BUCKET,
   MESSAGING_SENDER_ID,
@@ -26,7 +25,6 @@ const firebaseConfig = {
 // Initialize Firebase
 export const FIREBASE_APP = initializeApp(firebaseConfig);
 export const FIREBASE_AUTH = getAuth(FIREBASE_APP); // Get the auth instance
-//export const FIREBASE_ANALYTICS = getAnalytics(FIREBASE_APP); // Optional, if you use analytics
 export const FIREBASE_FIRESTORE = getFirestore(FIREBASE_APP);
 
 setPersistence(FIREBASE_AUTH, browserLocalPersistence) //<=== doesnt work :D

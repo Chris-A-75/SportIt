@@ -93,25 +93,24 @@ const getBookedTimeSlots = () => { //TODO: fix the date firmatting
     const bookingCourtType = booking.CourtType;
 
     if (booking.Time && booking.Time.seconds) {
-      const bookingDate = new Date(booking.Time.seconds * 1000); // convert to JS Date
-      const bookingTime = moment(bookingDate).utcOffset(3); // adjust for UTC+3
-      const bookingDateFormatted = bookingTime.startOf('day');
+      const bookingTimeInMoment = moment(booking.Time.seconds*1000); // THE booking time 
+      const bookingDateFormatted = bookingTimeInMoment.clone().startOf('day');  //just the day
 
       console.log('Checking booking:', {
         bookingCourtType,
         selectedCourtType,
         bookingDateFormatted: bookingDateFormatted.format('DD MMM'),
         selectedDate: selectedDateFormatted.format('DD MMM'),
-        bookingTime: bookingTime.format('YYYY-MM-DD HH:mm:ss'), // log in a detailed format
+        bookingTime: bookingTimeInMoment.format('YYYY-MM-DD HH:mm:ss'), // log in a detailed format
       });
 
       // log the formatted hour to see the actual booked time
-      console.log('Booking Time (UTC+3):', bookingTime.format('HH:mm'));
+      console.log('Booking Time (UTC+3):', bookingTimeInMoment.format('HH:mm'));
 
       if (bookingCourtType === selectedCourtType && bookingDateFormatted.isSame(selectedDateFormatted)) {
         const duration = booking.DurationInHalfHours * halfHourDuration; // duration in minutes
-        const bookingEnd = bookingTime.clone().add(duration, 'minutes'); // end time based on duration
-        let current = bookingTime.clone(); // starting point for time slots
+        const bookingEnd = bookingTimeInMoment.clone().add(duration, 'minutes'); // end time based on duration
+        let current = bookingTimeInMoment.clone(); // starting point for time slots
 
         while (current.isBefore(bookingEnd)) {
           bookedSlots.push(current.format('HH:mm')); // format to HH:mm for output

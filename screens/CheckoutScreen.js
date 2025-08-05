@@ -17,13 +17,14 @@ const CheckoutScreen = ({ route, navigation }) => { // added navigation prop
   const totalCost = numPeople * (selectedTimes.length * costPerPerson);
   
   const formattedDate = moment(selectedDate, 'DD MMM').format('dddd, MMMM Do YYYY');
-  const startTime = moment(selectedTimes[0], 'HH:mm');
+  const startTime = moment(`${selectedDate} ${selectedTimes[0]}`, 'DD MMM HH:mm');
   const endTime = moment(selectedTimes[selectedTimes.length - 1], 'HH:mm').add(30, 'minutes');
 
   // calculate duration based on the number of selected times
   const totalDurationInHalfHours = selectedTimes.length; // each selected time represents a half hour
   const totalDurationInHours = totalDurationInHalfHours * 0.5; // convert half hours to hours
-
+  console.log(startTime);
+  console.log(selectedTimes);
   // booking data using the correct duration
   const bookingData = { //TODO: CHANGE THIS LATER
     CourtType: courtType,
