@@ -23,10 +23,9 @@ const CheckoutScreen = ({ route, navigation }) => { // added navigation prop
   // calculate duration based on the number of selected times
   const totalDurationInHalfHours = selectedTimes.length; // each selected time represents a half hour
   const totalDurationInHours = totalDurationInHalfHours * 0.5; // convert half hours to hours
-  console.log(startTime);
-  console.log(selectedTimes);
+  
   // booking data using the correct duration
-  const bookingData = { //TODO: CHANGE THIS LATER
+  const bookingData = { 
     CourtType: courtType,
     DurationInHalfHours: selectedTimes.length + 1,
     Name: "John Doe",
