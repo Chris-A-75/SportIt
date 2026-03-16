@@ -1,6 +1,7 @@
 // Firebase stuff
 import { initializeApp } from 'firebase/app';
-import { getAuth, setPersistence, browserLocalPersistence } from 'firebase/auth'; // Import authentication
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { initializeAuth, getReactNativePersistence, getAuth } from 'firebase/auth';
 import { getFirestore } from "firebase/firestore";
 import {
   API_KEY,
@@ -24,10 +25,13 @@ const firebaseConfig = {
 
 // Initialize Firebase
 export const FIREBASE_APP = initializeApp(firebaseConfig);
-export const FIREBASE_AUTH = getAuth(FIREBASE_APP); // Get the auth instance
 export const FIREBASE_FIRESTORE = getFirestore(FIREBASE_APP);
-
-setPersistence(FIREBASE_AUTH, browserLocalPersistence) //<=== doesnt work :D
-  .catch((error) => {
-    console.error('Failed to set auth persistence:', error);
-  });
+export const FIREBASE_AUTH = (() => {
+  try {
+    return initializeAuth(FIREBASE_APP, {
+      persistence: getReactNativePersistence(AsyncStorage),
+    });
+  } catch {
+    return getAuth(FIREBASE_APP);
+  }
+})();
